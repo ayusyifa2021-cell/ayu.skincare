@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayu Syfa Minimarket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff6fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ff80b0;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .produk-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px;
+    }
+
+    .produk {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      margin: 10px;
+      width: 200px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .produk:hover {
+      transform: scale(1.05);
+    }
+
+    .produk img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .produk h3 {
+      margin: 10px 0 5px;
+    }
+
+    .produk p {
+      margin: 5px 0;
+    }
+
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    #keranjang {
+      background-color: #fff0f5;
+      padding: 20px;
+      border-top: 4px solid #ff69b4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ffb6c1;
+      color: white;
+    }
+
+    form {
+      margin-top: 20px;
+      max-width: 400px;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    footer {
+      background-color: #ff80b0;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ayu Syfa Minimarket 🛍️</h1>
+    <p>Belanja kebutuhanmu dengan mudah & cepat 💖</p>
+  </header>
+
+  <section class="produk-container">
+    <div class="produk">
+      <img src="https://via.placeholder.com/200x150?text=Serum" alt="Serum">
+      <h3>Serum Wajah</h3>
+      <p>Rp50.000</p>
+      <button onclick="tambahKeranjang('Serum Wajah', 50000)">Tambah</button>
+    </div>
+
+    <div class="produk">
+      <img src="https://via.placeholder.com/200x150?text=Face+Wash" alt="Face Wash">
+      <h3>Face Wash</h3>
+      <p>Rp35.000</p>
+      <button onclick="tambahKeranjang('Face Wash', 35000)">Tambah</button>
+    </div>
+
+    <div class="produk">
+      <img src="https://via.placeholder.com/200x150?text=Moisturizer" alt="Moisturizer">
+      <h3>Moisturizer</h3>
+      <p>Rp45.000</p>
+      <button onclick="tambahKeranjang('Moisturizer', 45000)">Tambah</button>
+    </div>
+
+    <div class="produk">
+      <img src="https://via.placeholder.com/200x150?text=Masker" alt="Masker">
+      <h3>Masker Wajah</h3>
+      <p>Rp25.000</p>
+      <button onclick="tambahKeranjang('Masker Wajah', 25000)">Tambah</button>
+    </div>
+  </section>
+
+  <section id="keranjang">
+    <h2>🛒 Keranjang Belanja</h2>
+    <table id="tabelKeranjang">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <h3>Total: Rp<span id="total">0</span></h3>
+
+    <h3>📝 Data Pengiriman</h3>
+    <form onsubmit="checkout(event)">
+      <input type="text" id="nama" placeholder="Nama Lengkap" required>
+      <textarea id="alamat" placeholder="Alamat Lengkap" required></textarea>
+      <input type="tel" id="hp" placeholder="Nomor HP" required>
+      <button type="submit">Pesan Sekarang</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 Ayu Syfa Minimarket | Dibuat dengan 💗</p>
+  </footer>
+
+  <script>
+    let keranjang = [];
+    let total = 0;
+
+    function tambahKeranjang(nama, harga) {
+      keranjang.push({ nama, harga });
+      total += harga;
+      updateKeranjang();
+    }
+
+    function hapusItem(index) {
+      total -= keranjang[index].harga;
+      keranjang.splice(index, 1);
+      updateKeranjang();
+    }
+
+    function updateKeranjang() {
+      const tbody = document.querySelector("#tabelKeranjang tbody");
+      tbody.innerHTML = "";
+      keranjang.forEach((item, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.nama}</td>
+          <td>Rp${item.harga.toLocaleString()}</td>
+          <td><button onclick="hapusItem(${i})">Hapus</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById("total").textContent = total.toLocaleString();
+    }
+
+    function checkout(event) {
+      event.preventDefault();
+      if (keranjang.length === 0) {
+        alert("Keranjang masih kosong!");
+        return;
+      }
+      const nama = document.getElementById("nama").value;
+      const alamat = document.getElementById("alamat").value;
+      const hp = document.getElementById("hp").value;
+
+      alert(`Terima kasih ${nama}!\nPesanan kamu akan dikirim ke:\n${alamat}\nNomor HP: ${hp}\nTotal belanja: Rp${total.toLocaleString()}`);
+      
+      keranjang = [];
+      total = 0;
+      updateKeranjang();
+      document.getElementById("nama").value = "";
+      document.getElementById("alamat").value = "";
+      document.getElementById("hp").value = "";
+    }
+  </script>
+</body>
+</html>
